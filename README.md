@@ -21,10 +21,14 @@ DAGR-VQA is the first framework to integrate register-tokens as global context c
 The following scripts are included in this repository:
 
 1. **`extract_frame.py`**: Extract 8 frames per video from LSVQ dataset
-2. **`train_sal.py`**: Train saliency model (DIEM + register tokens) on DHF1K dataset
-3. **`inference_sal.py`**: Generate saliency maps for LSVQ videos using pretrained model
-4. **`train_lsvq.py`**: Train VQA model on LSVQ with train/val/test split
-5. **`evaluate_vqa.py`**: Evaluate and fine-tune VQA model (SimpleFusion)
+2. **`dataloader.py`**: Data loading and preparation for VQA model
+3. **`sal_withoutreg.py`**: Saliency pretraining model implementation without register tokens
+4. **`sal_withreg.py`**: Saliency model implementation with register tokens
+5. **`train_sal.py`**: Train saliency model (DIEM + register tokens) on DHF1K dataset
+6. **`inference_sal.py`**: Generate saliency maps for LSVQ videos using pretrained model
+7. **`VQA.py`**: Spatiotemporal VQA module
+8. **`train_lsvq.py`**: Train VQA model on LSVQ with train/val/test split
+9. **`evaluate_vqa.py`**: Evaluate and fine-tune VQA model (SimpleFusion)
 
 ## Installation
 
