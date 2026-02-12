@@ -39,28 +39,23 @@ pip install opencv-python numpy pandas scipy scikit-learn tqdm pillow matplotlib
 
 ## Pipeline (Step-by-Step)
 
-### 1. Extract Frames
-```bash
-python extract_frame.py
-```
-
-### 2. Train Saliency Model
+### 1. Train Saliency Model
 ```bash
 python train_sal.py
 ```
 
-### 3. Generate Saliency Maps
+### 2. Generate Saliency Maps
 Edit `inference_sal.py` to set your checkpoint, then run:
 ```bash
 python inference_sal.py
 ```
 
-### 4. Train VQA Model
+### 3. Train VQA Model
 ```bash
 python train_lsvq.py
 ```
 
-### 5. Evaluate VQA
+### 4. Evaluate VQA
 ```bash
 python evaluate_vqa.py
 ```
