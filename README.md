@@ -28,13 +28,14 @@ The following scripts are included in this repository:
 
 ## Installation
 
-To use DAGR-VQA, clone this repository and install the required dependencies:
+To use DAGR-VQA, clone this repository, activate an virtual environment and install the required dependencies:
 
 ```bash
 git clone https://github.com/yourusername/DAGR-VQA.git
 cd DAGR-VQA
-pip install torch torchvision
-pip install opencv-python numpy pandas scipy scikit-learn tqdm pillow matplotlib
+python3 -m venv dagrvqa
+source dagrvqa/bin/activate
+pip install -r requirements.txt
 ```
 
 ## Pipeline (Step-by-Step)
