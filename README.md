@@ -86,9 +86,9 @@ python evaluate_vqa.py
 If you use this code in your research, please cite:
 
 ```bibtex
-@article{mithila2026dagr,
+@article{mithila2026convolutions,
   title={Convolutions Need Registers Too: HVS-Inspired Dynamic Attention for Video Quality Assessment},
-  author={Mithila, Mayesha Maliha R. and Farias, Mylene C.Q.},
+  author={Mithila, Mayesha Maliha R and Farias, Mylene CQ},
   journal={arXiv preprint arXiv:2601.11045},
   year={2026}
 }
@@ -96,7 +96,7 @@ If you use this code in your research, please cite:
 
 ## Acknowledgments
 
-This work was supported by the Department of Computer Science, Texas State University, San Marcos, Texas, United States.
+This research was supported by the Department of Computer Science, Texas State University, San Marcos, Texas, United States.
 
 ## Contact
 
