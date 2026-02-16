@@ -27,8 +27,8 @@ The following scripts are included in this repository:
 5. **`train_sal.py`**: Train saliency model (DIEM + register tokens) on DHF1K dataset
 6. **`inference_sal.py`**: Generate saliency maps for LSVQ videos using pretrained model
 7. **`VQA.py`**: Spatiotemporal VQA module
-8. **`train_lsvq.py`**: Train VQA model on LSVQ with train/val/test split
-9. **`evaluate_vqa.py`**: Evaluate and fine-tune VQA model (SimpleFusion)
+8. **`train_lsvq.py`**: Train VQA model on LSVQ (or other VQA datasets) with train/val/test split
+9. **`evaluate_vqa.py`**: Evaluate and fine-tune VQA model.
 
 ## Installation
 
@@ -50,17 +50,17 @@ python train_sal.py
 ```
 
 ### 2. Generate Saliency Maps
-Edit `inference_sal.py` to set your checkpoint, then run:
+Edit `inference_sal.py` to set your checkpoint obtained from train_sal.py, then run:
 ```bash
 python inference_sal.py
 ```
 
-### 3. Train VQA Model
+### 3. Train the VQA Model along with inferenced saliency maps 
 ```bash
 python train_lsvq.py
 ```
 
-### 4. Evaluate VQA
+### 4. Evaluate the VQA model
 ```bash
 python evaluate_vqa.py
 ```
