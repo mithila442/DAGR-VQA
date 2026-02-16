@@ -65,6 +65,13 @@ python train_lsvq.py
 python evaluate_vqa.py
 ```
 
+## Qualitative Results: Dynamic Saliency
+
+Below are examples showing how register-token attention produces temporally adaptive saliency that tracks perceptually dominant regions over time (LSVQ and KonVid-1k).
+
+![Dynamic saliency examples on LSVQ and KonVid-1k](assets/dynamic_saliency.png)
+
+
 ## Results
 
 ### Model Performance on Benchmark Datasets
