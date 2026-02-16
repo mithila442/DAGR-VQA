@@ -24,7 +24,7 @@ The following scripts are included in this repository:
 2. **`dataloader.py`**: Data loading and preparation for VQA model
 3. **`sal_withoutreg.py`**: Saliency pretraining model implementation without register tokens
 4. **`sal_withreg.py`**: Saliency model implementation with register tokens
-5. **`train_sal.py`**: Train saliency model (DIEM + register tokens) on DHF1K dataset
+5. **`train_sal.py`**: Train saliency model with register tokens on DHF1K dataset
 6. **`inference_sal.py`**: Generate saliency maps for LSVQ videos using pretrained model
 7. **`VQA.py`**: Spatiotemporal VQA module
 8. **`train_lsvq.py`**: Train VQA model on LSVQ (or other VQA datasets) with train/val/test split
