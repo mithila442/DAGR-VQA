@@ -352,68 +352,82 @@ def collect_token_embeddings(model, dataloader, device, save_path="token_embeddi
     print(f"💾 Saved to {save_path}")
 
 if __name__ == '__main__':
-    diem_root = './DIEM'
-    expected_length = 60
-
-    # 1. Make sure extracted_frames exists in every DIEM subfolder
-    for subfolder in sorted(os.listdir(diem_root)):
-        subfolder_path = os.path.join(diem_root, subfolder)
-        video_dir = os.path.join(subfolder_path, "video")
-        frame_dir = os.path.join(subfolder_path, "extracted_frames")
-        if not os.path.exists(frame_dir):
-            video_files = [f for f in os.listdir(video_dir) if f.endswith('.mp4')]
-            if video_files:
-                video_name = video_files[0]
-                print(f"Extracting frames: {video_name} in {subfolder} ...")
-                extract_frame(video_dir, video_name, frame_dir, dataset_type="saliency")
-
-    device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
-    num_epochs = 100
-    learning_rate = 5e-3
-    batch_size = 3
-    accumulation_steps = 4
-    sub_batch_size = 6
+    if device.type == 'cuda':
+        print(torch.cuda.device_count(), "GPUs are available.")
+        print("CUDA_VISIBLE_DEVICES:", os.environ.get("CUDA_VISIBLE_DEVICES", "Not Set"))
 
-    data_transforms = transforms.Compose([
-        transforms.Resize((224, 398)),
-        transforms.ToTensor(),
-    ])
+    phase = 'train'
+    if phase == 'train':
+        stateful = False
+    else:
+        stateful = True
 
-    train_dataset = DIEMSaliencyDataset(
-        diem_root=diem_root,
-        transform=data_transforms,
-        expected_length=60
-    )
-    print(f"Found {len(train_dataset)} DIEM video files in {diem_root}")
+    if phase == "train":
+        num_epochs = 200
+        learning_rate = 5e-3
+        batch_size = 5  # Number of videos processed simultaneously
+        accumulation_steps = 4
+        sub_batch_size = 6  # Number of frames processed at once per sub-batch
+        expected_length = 60
 
-    train_loader = DataLoader(
-        train_dataset,
-        batch_size=batch_size,
-        shuffle=True,
-        num_workers=5,
-        collate_fn=collate_fn
-    )
+        train_data_folder = './dhf1k/'
 
-    model = UNetWithRegisterTokens(in_channels=3, out_channels=1, num_register_tokens=1).to(device)
-    criterion = CombinedLoss(alpha1=0.01, alpha2=0.1)
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-    scheduler = CosineAnnealingLR(optimizer, T_max=20, eta_min=0)
+        data_transforms = transforms.Compose([
+            transforms.Resize((224, 398)),
+            transforms.ToTensor(),
+        ])
 
-    train_model(
-        model,
-        train_loader,
-        criterion,
-        optimizer,
-        scheduler,
-        num_epochs=num_epochs,
-        accumulation_steps=accumulation_steps,
-        sub_batch_size=sub_batch_size,
-        device=device,
-        root_dir=diem_root,
-        expected_length=expected_length
-    )
+        # Hyperparameters for frame extraction
+        size = 224  # Resize dimension for frames
+        frames_per_second = 4  # Adjusted to extract 60 frames from 15s videos
+        video_length_min = expected_length
+
+        videos_dir = os.path.join(train_data_folder, 'videos')
+
+        selected_indices = []
+
+        for i in range(1, 201):
+            video_name = f'{i:03d}.AVI'
+            save_folder = os.path.join(train_data_folder, f'{i:03d}', 'extracted_frames')
+            os.makedirs(save_folder, exist_ok=True)
+
+            # Extract frames but do not expect a return value
+            extract_frame(videos_dir, video_name, save_folder=save_folder, dataset_type='saliency')
+
+            # Append a placeholder to maintain indexing consistency
+            selected_indices.append(list(range(video_length_min)))
+
+            print(f'Extracted {video_length_min} frames from {video_name} to {save_folder}')
+
+        # Create dataset and dataloader
+        train_dataset = SaliencyDataset(train_data_folder, selected_indices, transform=data_transforms)
+        print(f"Found {len(train_dataset)} video files in {train_data_folder}")
+        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=1,
+                                  collate_fn=collate_fn))
+
+        # Initialize the model and training process
+        model = UNetWithRegisterTokens(in_channels=3, out_channels=1, num_register_tokens=4).to(device)
+        #model = nn.DataParallel(model).to(device)
+        criterion = CombinedLoss(alpha1=0.01, alpha2=0.1)
+        optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+        scheduler = CosineAnnealingLR(optimizer, T_max=20, eta_min=0)
+
+        # Train the model
+        train_model(model, train_loader, criterion, optimizer, scheduler, num_epochs=num_epochs,
+            accumulation_steps=accumulation_steps, sub_batch_size=sub_batch_size, device=device,
+            root_dir=train_data_folder, expected_length=expected_length, label_csv="DHF1k_attribute-all.csv")
+        
+        # === Save token embeddings after training ===
+        collect_token_embeddings(
+            model, 
+            train_loader, 
+            device, 
+            save_path="token_embeddings.npz", 
+            label_csv="DHF1k_attribute-all.csv"
+        )
 
 
 
