@@ -24,7 +24,7 @@ The following scripts are included in this repository:
 2. **`dataloader.py`**: Data loading and preparation for VQA model
 3. **`sal_withoutreg.py`**: Saliency pretraining model implementation without register tokens
 4. **`sal_withreg.py`**: Saliency model implementation with register tokens
-5. **`train_sal.py`**: Train saliency model with register tokens on DHF1K dataset
+5. **`train_sal.py`**: Train saliency model with register tokens on DHF1K/DIEM dataset
 6. **`inference_sal.py`**: Generate saliency maps for LSVQ videos using pretrained model
 7. **`VQA.py`**: Spatiotemporal VQA module
 8. **`train_lsvq.py`**: Train VQA model on LSVQ (or other VQA datasets) with train/val/test split
@@ -32,10 +32,10 @@ The following scripts are included in this repository:
 
 ## Installation
 
-To use DAGR-VQA, clone this repository, activate an virtual environment and install the required dependencies:
+To use DAGR-VQA, clone this repository, activate a virtual environment and install the required dependencies:
 
 ```bash
-git clone https://github.com/yourusername/DAGR-VQA.git
+git clone https://github.com/mithila442/DAGR-VQA.git
 cd DAGR-VQA
 python3 -m venv dagrvqa
 source dagrvqa/bin/activate
@@ -55,7 +55,7 @@ Edit `inference_sal.py` to set your checkpoint obtained from train_sal.py, then 
 python inference_sal.py
 ```
 
-### 3. Train the VQA Model along with inferenced saliency maps 
+### 3. Train the VQA Model along with inferred saliency maps 
 ```bash
 python train_lsvq.py
 ```
